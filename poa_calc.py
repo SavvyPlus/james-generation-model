@@ -30,8 +30,8 @@ def get_irradiance(di: float, dc: float, dh: float, dni: int, dhi: int,
 
     """
     id_val = abs(sum([di, dc, dh]))
-    ir_val = abs(0.2 * (dni * math.cos(math.radians(zenith)) + dhi) * (
-            (1 - math.cos(math.radians(tiltangle))) / 2))
+    ir_val = abs(0.2 * (dni * math.cos(math.radians(zenith)) + dhi) *
+                 ((1 - math.cos(math.radians(tiltangle))) / 2))
     ib_val = abs(dni * math.cos(math.radians(aoi)))
     return id_val, ir_val, ib_val
 
@@ -64,5 +64,5 @@ def get_effective_poa(id_val: float, ir_val: float, ib_val: float) -> float:
     return poa
 
 
-# id_v, ir_v, ib_v = get_irradiance(155.1378063, 0, -6.197917339, 39, 177, 71.74265435, 28, 80.97277871)
+# id_v, ir_v, ib_v = get_irradiance(155.1378063, 0, -6.197917339, 39, 165, 71.74265435, 28, 80.97277871)
 # print(get_effective_poa(id_v, ir_v, ib_v))
