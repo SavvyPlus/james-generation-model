@@ -135,8 +135,11 @@ def solar_azimuth_angle(ha,sza,sd):
     return saa    
 
 
-"""Calculate the solar angle for dataframe from time stamp"""
+
 def calculate_angle(df: pd.DataFrame) -> pd.DataFrame:
+    """ Calculate solar angle based on time stamp
+    :param df: dataframe with TimeStamp column of pd.TimeStamp type
+    """
     df[col_date] = df['TimeStamp'].map(get_date)
     df[col_hour] = df['TimeStamp'].map(get_hour)
     df[col_julian_day] = df.apply(lambda x: julian_day(x[col_date], x[col_hour]), axis=1)
@@ -168,4 +171,4 @@ def calculate_angle(df: pd.DataFrame) -> pd.DataFrame:
     df[col_solar_azimuth_ang] = df.apply(lambda x: solar_azimuth_angle(x[col_hour_ang],
                                                                        x[col_solar_zen_ang],
                                                                        x[col_sun_dec]), axis=1)
-    return df[[col_date, col_hour, col_solar_azimuth_ang]]
+    return df

@@ -2,6 +2,7 @@ latitude = -37.67
 longitude = 144.85
 GMT = 10
 
+# solar angle columns
 col_date = 'Date'
 col_hour = 'Hour'
 col_julian_day = 'Julian Day'
@@ -28,6 +29,11 @@ col_solar_elev_ang = 'Solar Elevation Angle (deg)'
 col_aprox_atmos_ref = 'Approx Atmospheric Refraction (deg)'
 col_solar_elev_cor = 'Solar Elevation correct for atm ref (deg)'
 col_solar_azimuth_ang = 'Solar Azimuth Angle (deg cw from N)'
+
+# radiation columns
+col_dni = 'DNI on Horizontal (W/m2)'
+col_ghi = 'GHI on Horizontal (W/m2)'
+col_dhi = 'DHI on Horizontal (W/m2)'
 
 col_list = [col_julian_day,
             col_julian_century,
