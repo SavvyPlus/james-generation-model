@@ -1,30 +1,23 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[2]:
-
 
 import pandas as pd
 import numpy as np
 import math
 import time,datetime
+from util import *
 
 
-latitude=-37.67
-longitude=144.85
-GMT=10
-IO='Solar PV Model Rev1.6.xlsx'
-df= pd.read_excel(io=IO)
+def get_date(stamp):
+    delta = stamp - pd.to_datetime('1899-12-30 00:00:00')
+    timed = delta.total_seconds() / 86400
+    return int(timed)
 
+def get_hour(stamp):
+    delta = stamp - pd.to_datetime('1899-12-30 00:00:00')
+    timed = delta.total_seconds() / 86400
+    date = int(timed)
+    return timed - date
 
-def timetrans(stamp):
-    delta=stamp-pd.to_datetime('1899-12-30 00:00:00')  
-    timed=delta.total_seconds()/86400
-    date=int(timed)
-    hour=timed-int(date)
-    return date,hour
-
-def julian_day(date,hour):
+def julian_day(date, hour):
     jd=date+2415018.5+hour-GMT/24
     return jd
 
@@ -43,7 +36,7 @@ def eccent_earth_orbit(jc):
     eeo=0.016708634-jc*(0.000042037+0.0000001267*jc)
     return eeo
 
-def sun_equation_of_centre(jc):
+def sun_equation_of_centre(jc, gmas):
     seoc=math.sin(math.radians(gmas))*(1.914602-jc*(0.004817+0.000014*jc))+math.sin(math.radians(2*gmas))*(0.019993-0.000101*jc)+math.sin(math.radians(3*jc))*0.000289
     return seoc
 
@@ -140,106 +133,39 @@ def solar_azimuth_angle(ha,sza,sd):
     else:
         saa=(540-math.degrees(math.acos(((math.sin(math.radians(latitude))*math.cos(math.radians(sza)))-math.sin(math.radians(sd)))/(math.cos(math.radians(latitude))*math.sin(math.radians(sza))))))%360
     return saa    
-    
-
-timestamp_l=[]
-jd_l=[]
-jc_l=[]
-gmls_l=[]
-gmas_l=[]
-eeo_l=[]
-seoc_l=[]
-stl_l=[]
-sal_l=[]
-moe_l=[]
-oc_l=[]
-sd_l=[]
-vy_l=[]
-eot_l=[]
-hs_l=[]
-sn_l=[]
-st_l=[]
-sst_l=[]
-tst_l=[]
-ha_l=[]
-sza_l=[]
-sea_l=[]
-aar_l=[]
-sec_l=[]
-saa_l=[]
 
 
-for i in range(8760):
-    stamp=df.iloc[i][0]                  #timestamp    
-    date,hour=timetrans(stamp)
-    jd=julian_day(date,hour)   
-    jc=julian_century(jd)
-    gmls=greenwich_mean_long_sun(jc)
-    gmas=geom_mean_anom_sun(jc)
-    eeo=eccent_earth_orbit(jc)
-    seoc= sun_equation_of_centre(jc)
-    stl=sun_true_long(gmls,seoc)
-    sal=sun_app_long(jc,stl)
-    moe= mean_obliq_ecliptic(jc)
-    oc= obliq_corr(jc,moe)
-    sd=sun_declin(sal,oc)
-    vy=var_y(oc)
-    eot= eq_of_time(vy,gmls,eeo,gmas)
-    hs=HA_sunrise(sd)
-    sn,snh,snm,sns=solar_noon(eot)
-    st,sth,stm,sts=sunrise_time(sn,hs)
-    sst,ssth,sstm,ssts=sunset_time(sn,hs)
-    tst=true_solar_time(hour,eot)
-    ha=hour_angle(tst)
-    sza=solar_zenith_angle(sd,ha)
-    sea=solar_elevation_angle(sza)
-    aar=approx_atmospheric_refraction(sea)
-    sec= solar_elevation_correct_for_atm_ref(sea,aar)
-    saa=solar_azimuth_angle(ha,sza,sd)
-    timestamp_l.append(stamp)
-    jd_l.append(jd)
-    jc_l.append(jc)
-    gmls_l.append(gmls)
-    gmas_l.append(gmas)
-    eeo_l.append(eeo)
-    seoc_l.append(seoc)
-    stl_l.append(stl)
-    sal_l.append(sal)
-    moe_l.append(moe)
-    oc_l.append(oc)
-    sd_l.append(sd)
-    vy_l.append(vy)
-    eot_l.append(eot)
-    hs_l.append(hs)
-    sn_l.append(str(snh)+' :'+str(snm)+' :'+str(sns))
-    st_l.append(str(sth)+' :'+str(stm)+' :'+str(sts))
-    sst_l.append(str(ssth)+' :'+str(sstm)+' :'+str(ssts))
-    tst_l.append(tst)
-    ha_l.append(ha)
-    sza_l.append(sza)
-    sea_l.append(sea)
-    aar_l.append(aar)
-    sec_l.append(sec)
-    saa_l.append(saa) 
-    
-d = {'TimeStamp': timestamp_l ,'Julian Day': jd_l, 'Julian Century': jc_l, 'greenwich_mean_long_sun': gmls_l, 'eom_mean_anom_sun':gmas_l,'eccent_earth_orbit': eeo_l,
-     'sun_equation_of_centre': seoc_l,'sun_ture_long': stl_l,'sun_app_long': sal_l,'mean_obliq_ecliptic': moe_l,'obliq_corr': oc_l,'sun_declin': sd_l,
-     'var_y': vy_l,'eq_of_time': eot_l,'HA_sunrise': hs_l,'solar_noon':sn_l,'sunrise_time': st_l,'sunset_time': sst_l,'true_solar_time': tst_l,'hour_angle': ha_l,
-    'solar_zenith_angle(deg)': sza_l,'solar_elevation_angle(deg)': sea_l,'approx_atmospheric_refraction(deg)': aar_l,'solar_elevation_correct_for_atm_ref(deg)': sec_l,
-    'solar_azimuth_angle': saa_l}
-
-solar_angle_cal=pd.DataFrame(d)
-print(solar_angle_cal)
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
+"""Calculate the solar angle for dataframe from time stamp"""
+def calculate_angle(df: pd.DataFrame) -> pd.DataFrame:
+    df[col_date] = df['TimeStamp'].map(get_date)
+    df[col_hour] = df['TimeStamp'].map(get_hour)
+    df[col_julian_day] = df.apply(lambda x: julian_day(x[col_date], x[col_hour]), axis=1)
+    df[col_julian_century] = df[col_julian_day].map(julian_century)
+    df[col_geom_mean_long_sun] = df[col_julian_century].map(greenwich_mean_long_sun)
+    df[col_geom_mean_anom_sun] = df[col_julian_century].map(geom_mean_anom_sun)
+    df[col_eccent_earth_orbit] = df[col_julian_century].map(eccent_earth_orbit)
+    df[col_sun_equ_centre] = df.apply(lambda x: sun_equation_of_centre(x[col_julian_century],
+                                                                       x[col_geom_mean_anom_sun]), axis=1)
+    df[col_sun_true_long] = df.apply(lambda x: sun_true_long(x[col_geom_mean_long_sun], x[col_sun_equ_centre]), axis=1)
+    df[col_sun_app_long] = df.apply(lambda x: sun_app_long(x[col_julian_century], x[col_sun_true_long]), axis=1)
+    df[col_mean_obliq_ecl] = df[col_julian_century].map(mean_obliq_ecliptic)
+    df[col_oblig_cor] = df.apply(lambda x: obliq_corr(x[col_julian_century], x[col_mean_obliq_ecl]), axis=1)
+    df[col_sun_dec] = df.apply(lambda x: sun_declin(x[col_sun_app_long], x[col_oblig_cor]), axis=1)
+    df[col_var_y] = df[col_oblig_cor].map(var_y)
+    df[col_eq_time] = df.apply(lambda x: eq_of_time(x[col_var_y],
+                                                    x[col_geom_mean_long_sun],
+                                                    x[col_eccent_earth_orbit],
+                                                    x[col_geom_mean_anom_sun]),
+                               axis=1)
+    df[col_ha_sunrise] = df[col_sun_dec].map(HA_sunrise)
+    df[col_true_solar_time] = df.apply(lambda x: true_solar_time(x[col_hour], x[col_eq_time]), axis=1)
+    df[col_hour_ang] = df[col_true_solar_time].map(hour_angle)
+    df[col_solar_zen_ang] = df.apply(lambda x: solar_zenith_angle(x[col_sun_dec], x[col_hour_ang]), axis=1)
+    df[col_solar_elev_ang] = df[col_solar_zen_ang].map(solar_elevation_angle)
+    df[col_aprox_atmos_ref] = df[col_solar_elev_ang].map(approx_atmospheric_refraction)
+    df[col_solar_elev_cor] = df.apply(lambda x: solar_elevation_correct_for_atm_ref(x[col_solar_elev_ang],
+                                                                                    x[col_aprox_atmos_ref]), axis=1)
+    df[col_solar_azimuth_ang] = df.apply(lambda x: solar_azimuth_angle(x[col_hour_ang],
+                                                                       x[col_solar_zen_ang],
+                                                                       x[col_sun_dec]), axis=1)
+    return df[[col_date, col_hour, col_solar_azimuth_ang]]
