@@ -3,6 +3,7 @@ from solar_angle_calculations import calculate_angle
 from radiation_calculation import calculate_radiation
 from aoi_calculation import aoi_calculation
 from perez_model import perez
+from poa_calc import effective_poa_calculation
 from util import *
 
 orientation = 0
@@ -31,4 +32,7 @@ if __name__ == '__main__':
     df = aoi_calculation(df, orientation, tiltangle)
 
     # run perez model
-    df = perez(df, tiltangle)
+    # df = perez(df, tiltangle)
+
+    # calcualt effective poa
+    df = effective_poa_calculation(df, tiltangle)

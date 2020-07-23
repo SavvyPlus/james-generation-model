@@ -46,6 +46,16 @@ col_perez_sky = 'Perez - sky clearness e'
 col_perez_air_mass_optical = 'Perez - Air Mass optical'
 col_perez_delta = 'Perez - delta'
 
+
+# irradiance columns
+col_id = 'Id = Di + Dc + Dh diffuse on panel W/m2'
+col_ir = 'Ir - ground reflected irradiance on panel'
+col_ib = 'Ib - beam irradiance on panel W/m2'
+
+# POA columns
+col_poa_wm2 = 'Effective POA on panel W/m2'
+col_poa_kwm2 = 'Effective POA on panel kW/m2'
+
 col_list = [col_julian_day,
             col_julian_century,
             col_geom_mean_long_sun,
