@@ -67,11 +67,11 @@ def perez(df: pd.DataFrame, tiltangle: float):
     df[col_perez_b] = df[col_solar_zen_ang].map(get_perez_b)
     df[col_perez_sky] = df.apply(lambda x: (x[col_dni] + x[col_dhi]) / (
             (x[col_dhi] + 5.534e-6) * x[col_solar_zen_ang] ** 3 * (
-            1 + (5.534e-6 * x[col_solar_zen_ang] ** 3))))
+            1 + (5.534e-6 * x[col_solar_zen_ang] ** 3))), axis=1)
     df[col_perez_air_mass_optical] = df.apply(
-        lambda x: get_perez_air_mass(x[col_solar_zen_ang], x[col_perez_b]))
+        lambda x: get_perez_air_mass(x[col_solar_zen_ang], x[col_perez_b]), axis=1)
     df[col_perez_delta] = df.apply(
-        lambda x: get_perez_delta(x[col_dhi], x[col_perez_air_mass_optical]))
+        lambda x: get_perez_delta(x[col_dhi], x[col_perez_air_mass_optical]), axis=1)
 
     # i = int(perez_sky > 1.065) + int(perez_sky > 1.23) + int(perez_sky > 1.5) + int(
     #     perez_sky > 1.95) \
