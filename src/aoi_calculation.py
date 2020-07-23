@@ -1,6 +1,6 @@
 import math
 import pandas as pd
-from util import col_aoi_rad, col_aoi_deg, col_solar_zen_ang, col_solar_azimuth_ang
+from .util import col_aoi_rad, col_aoi_deg, col_solar_zen_ang, col_solar_azimuth_ang
 
 """
 Description:

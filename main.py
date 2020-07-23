@@ -1,12 +1,12 @@
 import pandas as pd
-from solar_angle_calculations import calculate_angle
-from radiation_calculation import calculate_radiation
-from aoi_calculation import aoi_calculation
-from perez_model import perez
-from poa_calc import effective_poa_calculation
-from power_dc import power_dc_calculation
-from power_ac import power_ac_calculation
-from util import *
+from src.solar_angle_calculations import calculate_angle
+from src.radiation_calculation import calculate_radiation
+from src.aoi_calculation import aoi_calculation
+from src.perez_model import perez
+from src.poa_calc import effective_poa_calculation
+from src.power_dc import power_dc_calculation
+from src.power_ac import power_ac_calculation
+from src.util import *
 
 
 orientation = 0
@@ -15,7 +15,7 @@ lossfactortoggle = 1
 pvefficiency = 0.19
 panel_num = 18
 area_per_panel = 1.5
-invertsize = 5.3
+invertsize = 5.25
 invertefficiency = 0.96
 sys_losses = {
     'soiling': 0.02,
@@ -31,7 +31,7 @@ sys_losses = {
 }
 
 if __name__ == '__main__':
-    IO = '../Solar PV Model Rev1.6.xlsx'
+    IO = './Solar PV Model Rev1.6.xlsx'
     df = pd.read_excel(io=IO, sheet_name='Data Dump', usecols="A:C",
                        parse_dates=['TimeStamp'])
 

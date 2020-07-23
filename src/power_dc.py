@@ -1,7 +1,7 @@
 import pandas as pd
 
 from typing import Dict
-from util import col_dc_m2, col_dc_array, col_poa_wm2
+from .util import col_dc_m2, col_dc_array, col_poa_wm2
 
 SystemLosses = Dict[str, float]
 
