@@ -35,6 +35,16 @@ col_dni = 'DNI on Horizontal (W/m2)'
 col_ghi = 'GHI on Horizontal (W/m2)'
 col_dhi = 'DHI on Horizontal (W/m2)'
 
+# aoi columns
+col_aoi_rad = 'Angle of Incidence (a) rad'
+col_aoi_deg = 'Angle of Incidence (AOI) deg'
+
+# Perez columns
+col_perez_a = 'Perez - a'
+col_perez_b = 'Perez - b'
+col_perez_sky = 'Perez - sky clearness e'
+col_perez_air_mass = 'Perez - Air Mass optical'
+
 col_list = [col_julian_day,
             col_julian_century,
             col_geom_mean_long_sun,
