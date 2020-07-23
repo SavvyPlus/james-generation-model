@@ -8,6 +8,7 @@ from power_dc import power_dc_calculation
 from power_ac import power_ac_calculation
 from util import *
 
+
 orientation = 0
 tiltangle = 28
 lossfactortoggle = 1
@@ -33,19 +34,12 @@ if __name__ == '__main__':
     IO = '../Solar PV Model Rev1.6.xlsx'
     df = pd.read_excel(io=IO, sheet_name='Data Dump', usecols="A:C",
                        parse_dates=['TimeStamp'])
-    # df_org = pd.read_excel(IO, sheet_name='Model Calcs', usecols="A:Z", parse_dates=['Date']).dropna()
 
     # calculate solar angle
     df = calculate_angle(df)
 
-    # result = sum( list(a - b for a,b in zip(df[col_solar_azimuth_ang], df_org[col_solar_azimuth_ang])))
-    # print(result)
-
     # normalize solar radiation data
     df = calculate_radiation(df)
-    # df_org = pd.read_excel(IO, sheet_name='Model Calcs', usecols="AB:AD").dropna()
-    # result = sum( list(a - b for a,b in zip(df[col_dhi], df_org[col_dhi])))
-    # print(result)
 
     # calculate angle of incidence (AOI)
     df = aoi_calculation(df, orientation, tiltangle)
@@ -63,3 +57,8 @@ if __name__ == '__main__':
     # calculate final power AC
     df = power_ac_calculation(df, invertsize, invertefficiency)
     df.to_csv('final.csv')
+
+    # comparison
+    df_org = pd.read_excel(IO, sheet_name='Model Calcs', usecols="BH:BL").dropna()
+    result = sum(list(a - b for a, b in zip(df[col_ac_kw_invert_losses], df_org['Power AC\nkW\ninc Inverter losses'])))
+    print(result)
