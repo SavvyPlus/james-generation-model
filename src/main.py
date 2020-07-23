@@ -5,6 +5,7 @@ from aoi_calculation import aoi_calculation
 from perez_model import perez
 from poa_calc import effective_poa_calculation
 from power_dc import power_dc_calculation
+from power_ac import power_ac_calculation
 from util import *
 
 orientation = 0
@@ -13,6 +14,8 @@ lossfactortoggle = 1
 pvefficiency = 0.19
 panel_num = 18
 area_per_panel = 1.5
+invertsize = 5.2
+invertefficiency = 0.96
 sys_losses = {
     'soiling': 0.02,
     'shading': 0.03,
@@ -48,11 +51,15 @@ if __name__ == '__main__':
     df = aoi_calculation(df, orientation, tiltangle)
 
     # run perez model
-    # df = perez(df, tiltangle)
+    df = perez(df, tiltangle)
+    df.to_csv('perez.csv')
 
     # calculate effective poa
-    # df = effective_poa_calculation(df, tiltangle)
+    df = effective_poa_calculation(df, tiltangle)
 
     # calculate power DC
     df = power_dc_calculation(df, lossfactortoggle, pvefficiency, sys_losses, panel_num,
                               area_per_panel)
+
+    # calculate final power AC
+    df = power_ac_calculation(df, invertsize, invertefficiency)

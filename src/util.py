@@ -45,6 +45,18 @@ col_perez_b = 'Perez - b'
 col_perez_sky = 'Perez - sky clearness e'
 col_perez_air_mass_optical = 'Perez - Air Mass optical'
 col_perez_delta = 'Perez - delta'
+col_perez_f11 = 'Perez - e lookup for F11'
+col_perez_f12 = 'Perez - e lookup for F12'
+col_perez_f13 = 'Perez - e lookup for F13'
+col_perez_f21 = 'Perez - e lookup for F21'
+col_perez_f22 = 'Perez - e lookup for F22'
+col_perez_f23 = 'Perez - e lookup for F23'
+col_perez_f1 = 'Perez - F1'
+col_perez_f2 = 'Perez - F2'
+col_model = 'Which diffuse model?'
+col_di = 'Di W/m2'
+col_dc = 'Dc W/m2'
+col_dh = 'Dh W/m2'
 
 
 # irradiance columns
@@ -59,6 +71,11 @@ col_poa_kwm2 = 'Effective POA on panel kW/m2'
 # Power DC columns
 col_dc_m2 = 'Power DC W/m2'
 col_dc_array = 'Power DC W/array'
+
+# Power AC columns
+col_ac_w = 'Power AC W'
+col_ac_kw = 'Power AC kW'
+col_ac_kw_invert_losses = 'Power AC kW inc Inverter losses'
 
 col_list = [col_julian_day,
             col_julian_century,
