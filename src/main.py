@@ -4,16 +4,32 @@ from radiation_calculation import calculate_radiation
 from aoi_calculation import aoi_calculation
 from perez_model import perez
 from poa_calc import effective_poa_calculation
+from power_dc import power_dc_calculation
 from util import *
 
 orientation = 0
 tiltangle = 28
-
-
+lossfactortoggle = 1
+pvefficiency = 0.19
+panel_num = 18
+area_per_panel = 1.5
+sys_losses = {
+    'soiling': 0.02,
+    'shading': 0.03,
+    'snow': 0.0,
+    'mismatch': 0.02,
+    'wiring': 0.02,
+    'connections': 0.005,
+    'lid': 0.015,
+    'nameplate': 0.01,
+    'age': 0.0,
+    'availability': 0.02,
+}
 
 if __name__ == '__main__':
     IO = '../Solar PV Model Rev1.6.xlsx'
-    df = pd.read_excel(io=IO, sheet_name='Data Dump', usecols="A:C", parse_dates=['TimeStamp'])
+    df = pd.read_excel(io=IO, sheet_name='Data Dump', usecols="A:C",
+                       parse_dates=['TimeStamp'])
     # df_org = pd.read_excel(IO, sheet_name='Model Calcs', usecols="A:Z", parse_dates=['Date']).dropna()
 
     # calculate solar angle
@@ -34,5 +50,9 @@ if __name__ == '__main__':
     # run perez model
     # df = perez(df, tiltangle)
 
-    # calcualt effective poa
-    df = effective_poa_calculation(df, tiltangle)
+    # calculate effective poa
+    # df = effective_poa_calculation(df, tiltangle)
+
+    # calculate power DC
+    df = power_dc_calculation(df, lossfactortoggle, pvefficiency, sys_losses, panel_num,
+                              area_per_panel)

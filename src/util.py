@@ -56,6 +56,10 @@ col_ib = 'Ib - beam irradiance on panel W/m2'
 col_poa_wm2 = 'Effective POA on panel W/m2'
 col_poa_kwm2 = 'Effective POA on panel kW/m2'
 
+# Power DC columns
+col_dc_m2 = 'Power DC W/m2'
+col_dc_array = 'Power DC W/array'
+
 col_list = [col_julian_day,
             col_julian_century,
             col_geom_mean_long_sun,
