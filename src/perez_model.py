@@ -101,19 +101,19 @@ def perez(df: pd.DataFrame, tiltangle: float):
     
     df[col_perez_sky] = df.apply(lambda x: (x[col_dni] + x[col_dhi]) / (
             (x[col_dhi] + 5.534e-6) * x[col_solar_zen_ang] ** 3 * (
-            1 + (5.534e-6 * x[col_solar_zen_ang] ** 3))))
+            1 + (5.534e-6 * x[col_solar_zen_ang] ** 3))), axis=1)
     
     df[col_perez_air_mass_optical] = df.apply(
-        lambda x: get_perez_air_mass(x[col_solar_zen_ang], x[col_perez_b]))
+        lambda x: get_perez_air_mass(x[col_solar_zen_ang], x[col_perez_b]), axis=1)
     
     df[col_perez_delta] = df.apply(
-        lambda x: get_perez_delta(x[col_dhi], x[col_perez_air_mass_optical]))
+        lambda x: get_perez_delta(x[col_dhi], x[col_perez_air_mass_optical]),axis=1)
     
     df[col_perez_f11],df[col_perez_f12],df[col_perez_f13],df[col_perez_f21],
     df[col_perez_f22], df[col_perez_f23],df[col_perez_F1],df[col_perez_F2] = df.apply(
-        lambda x: get_perez_param(x[col_perez_sky],x[col_perez_delta],x[col_solar_zen_ang])
+        lambda x: get_perez_param(x[col_perez_sky],x[col_perez_delta],x[col_solar_zen_ang]),axis=1)
      
     df[col_model],df[col_Di], df[col_Dc], df[col_Dh]= df.apply(
-        lambda x: get_diffuse_values(x[col_dhi],tiltangle,x[col_solar_zen_angle],x[col_perez_F1],x[col_perez_F2]))
+        lambda x: get_diffuse_values(x[col_dhi],tiltangle,x[col_solar_zen_angle],x[col_perez_F1],x[col_perez_F2]), axis=1)
      
     return df
