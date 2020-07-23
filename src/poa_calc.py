@@ -2,9 +2,8 @@ import math
 import pandas as pd
 
 from typing import Tuple
-from util import col_ib, col_id, col_ir, col_dni, col_dhi, col_solar_zen_ang, col_aoi_deg, col_poa_wm2, col_poa_kwm2
-
-Irradiance = Tuple[float, float, float]
+from util import col_ib, col_id, col_ir, col_dni, col_dhi, col_solar_zen_ang, \
+    col_aoi_deg, col_poa_wm2, col_poa_kwm2, col_di, col_dc, col_dh
 
 
 def get_id_val(di: float, dc: float, dh: float) -> float:
@@ -95,10 +94,13 @@ def get_poa_wm2(id_val: float, ir_val: float, ib_val: float) -> float:
 
 
 def effective_poa_calculation(df: pd.DataFrame, tiltangle: float) -> pd.DataFrame:
-    # df[col_id] = df.apply(lambda x: get_id_val(x[col_di], x[col_dc], x[col_dh]), axis=1)
-    df[col_ir] = df.apply(lambda x: get_ir_val(x[col_dni], x[col_dhi], x[col_solar_zen_ang], tiltangle), axis=1)
+    df[col_id] = df.apply(lambda x: get_id_val(x[col_di], x[col_dc], x[col_dh]), axis=1)
+    df[col_ir] = df.apply(
+        lambda x: get_ir_val(x[col_dni], x[col_dhi], x[col_solar_zen_ang], tiltangle),
+        axis=1)
     df[col_ib] = df.apply(lambda x: get_ib_val(x[col_dni], x[col_aoi_deg]), axis=1)
-    # df[col_poa_wm2] = df.apply(lambda x: get_poa_wm2(x[col_id], x[col_ir], x[col_ib]), axis=1)
-    # df[col_poa_kwm2] = df[col_poa_wm2].map(lambda x: x / 1000)
+    df[col_poa_wm2] = df.apply(lambda x: get_poa_wm2(x[col_id], x[col_ir], x[col_ib]),
+                               axis=1)
+    df[col_poa_kwm2] = df[col_poa_wm2].map(lambda x: x / 1000)
 
     return df

@@ -14,7 +14,7 @@ lossfactortoggle = 1
 pvefficiency = 0.19
 panel_num = 18
 area_per_panel = 1.5
-invertsize = 5.2
+invertsize = 5.3
 invertefficiency = 0.96
 sys_losses = {
     'soiling': 0.02,
@@ -52,7 +52,6 @@ if __name__ == '__main__':
 
     # run perez model
     df = perez(df, tiltangle)
-    df.to_csv('perez.csv')
 
     # calculate effective poa
     df = effective_poa_calculation(df, tiltangle)
@@ -63,3 +62,4 @@ if __name__ == '__main__':
 
     # calculate final power AC
     df = power_ac_calculation(df, invertsize, invertefficiency)
+    df.to_csv('final.csv')

@@ -187,11 +187,11 @@ def perez(df: pd.DataFrame, tiltangle: float):
                                                        x[col_perez_f23]), axis=1)
     df[col_model] = df[col_solar_zen_ang].map(get_model)
     df[col_di] = df.apply(
-        lambda x: get_di(x[col_model], x[col_dhi], tiltangle, x[col_perez_f1]))
+        lambda x: get_di(x[col_model], x[col_dhi], tiltangle, x[col_perez_f1]), axis=1)
     df[col_dc] = df.apply(
         lambda x: get_dc(x[col_model], x[col_dhi], x[col_perez_f1], x[col_perez_a],
-                         x[col_perez_b]))
+                         x[col_perez_b]), axis=1)
     df[col_dh] = df.apply(
-        lambda x: get_dh(x[col_model], x[col_dhi], x[col_perez_f2], tiltangle))
+        lambda x: get_dh(x[col_model], x[col_dhi], x[col_perez_f2], tiltangle), axis=1)
 
     return df
