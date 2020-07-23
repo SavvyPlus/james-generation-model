@@ -43,7 +43,8 @@ col_aoi_deg = 'Angle of Incidence (AOI) deg'
 col_perez_a = 'Perez - a'
 col_perez_b = 'Perez - b'
 col_perez_sky = 'Perez - sky clearness e'
-col_perez_air_mass = 'Perez - Air Mass optical'
+col_perez_air_mass_optical = 'Perez - Air Mass optical'
+col_perez_delta = 'Perez - delta'
 
 col_list = [col_julian_day,
             col_julian_century,
