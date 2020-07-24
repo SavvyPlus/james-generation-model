@@ -1,3 +1,5 @@
+import json
+import os
 import pandas as pd
 from src.solar_angle_calculations import calculate_angle
 from src.radiation_calculation import calculate_radiation
@@ -9,34 +11,41 @@ from src.power_ac import power_ac_calculation
 from src.util import *
 
 
-orientation = 0
-tiltangle = 28
-lossfactortoggle = 1
-pvefficiency = 0.19
-panel_num = 18
-area_per_panel = 1.5
-invertsize = 5.25
-invertefficiency = 0.96
-sys_losses = {
-    'soiling': 0.02,
-    'shading': 0.03,
-    'snow': 0.0,
-    'mismatch': 0.02,
-    'wiring': 0.02,
-    'connections': 0.005,
-    'lid': 0.015,
-    'nameplate': 0.01,
-    'age': 0.0,
-    'availability': 0.02,
-}
+def lambda_handler(event, context):
+    latitude = event["latitude"]
+    longitude = event["longitude"]
+    GMT = event["GMT"]
+    orientation = event['orientation']
+    tiltangle = event['tiltangle']
+    lossfactortoggle = event['lossfactortoggle']
+    pvefficiency = event['pvefficiency']
+    panel_num = event['panel_num']
+    area_per_panel = event['area_per_panel']
+    invertsize = event['invertsize']
+    invertefficiency = event['invertefficiency']
+    sys_losses = {
+        'soiling': 0.02,
+        'shading': 0.03,
+        'snow': 0.0,
+        'mismatch': 0.02,
+        'wiring': 0.02,
+        'connections': 0.005,
+        'lid': 0.015,
+        'nameplate': 0.01,
+        'age': 0.0,
+        'availability': 0.02,
+    }
+    if 'sys_losses' in event.keys():
+        sys_losses = event['sys_losses']
 
-if __name__ == '__main__':
-    IO = './Solar PV Model Rev1.6.xlsx'
-    df = pd.read_excel(io=IO, sheet_name='Data Dump', usecols="A:C",
-                       parse_dates=['TimeStamp'])
-
+    bucket = event['bucket']
+    key = event['key']
+    file_path = s3_path.format(bucket, key)
+    print(file_path)
+    df = pd.read_csv(file_path, parse_dates=['TimeStamp'])
+    print(df)
     # calculate solar angle
-    df = calculate_angle(df)
+    df = calculate_angle(df, latitude, longitude, GMT)
 
     # normalize solar radiation data
     df = calculate_radiation(df)
@@ -56,9 +65,43 @@ if __name__ == '__main__':
 
     # calculate final power AC
     df = power_ac_calculation(df, invertsize, invertefficiency)
-    df.to_csv('final.csv')
+    local_path = '{}-final.csv'.format(key)
+    df.to_csv(f'/tmp/{local_path}', index=False)
+    print(put_file_to_s3(f'/tmp/{local_path}', bucket, local_path))
 
-    # comparison
-    df_org = pd.read_excel(IO, sheet_name='Model Calcs', usecols="BH:BL").dropna()
-    result = sum(list(a - b for a, b in zip(df[col_ac_kw_invert_losses], df_org['Power AC\nkW\ninc Inverter losses'])))
-    print(result)
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Calculation finished.')
+    }
+
+
+if __name__ == '__main__':
+    event = {
+        'latitude': -37.67,
+        'longitude': 144.85,
+        'GMT': 10,
+        'orientation': 0,
+        'tiltangle': 28,
+        'lossfactortoggle': 1,
+        'pvefficiency': 0.19,
+        'panel_num': 18,
+        'area_per_panel': 1.5,
+        'invertsize': 5.25,
+        'invertefficiency': 0.96,
+        'sys_losses': {
+            'soiling': 0.02,
+            'shading': 0.03,
+            'snow': 0.0,
+            'mismatch': 0.02,
+            'wiring': 0.02,
+            'connections': 0.005,
+            'lid': 0.015,
+            'nameplate': 0.01,
+            'age': 0.0,
+            'availability': 0.02,
+        },
+        'bucket': 'solar-radiation',
+        'key': '-37.583333_144.1_Solcast_PT60M.csv'
+    }
+
+    lambda_handler(event, None)
