@@ -1,7 +1,7 @@
 
 import pandas as pd
-from solar_angle_calculations import *
-from util import *
+from .solar_angle_calculations import *
+from .util import *
 
 
 def DNI_on_Horizontal(dni):

@@ -1,6 +1,6 @@
-latitude = -37.67
-longitude = 144.85
-GMT = 10
+import boto3
+
+client = boto3.client('s3', region_name='ap-southeast-2')
 
 # solar angle columns
 col_date = 'Date'
@@ -77,28 +77,13 @@ col_ac_w = 'Power AC W'
 col_ac_kw = 'Power AC kW'
 col_ac_kw_invert_losses = 'Power AC kW inc Inverter losses'
 
-col_list = [col_julian_day,
-            col_julian_century,
-            col_geom_mean_long_sun,
-            col_geom_mean_anom_sun,
-            col_eccent_earth_orbit,
-            col_sun_equ_centre,
-            col_sun_true_long,
-            col_sun_app_long,
-            col_mean_obliq_ecl,
-            col_oblig_cor,
-            col_sun_dec,
-            col_var_y,
-            col_eq_time,
-            col_ha_sunrise,
-            col_solar_noon,
-            col_sunrise_time,
-            col_sunset_time,
-            col_true_solar_time,
-            col_hour_ang,
-            col_solar_zen_ang,
-            col_solar_elev_ang,
-            col_aprox_atmos_ref,
-            col_solar_elev_cor,
-            col_solar_azimuth_ang
-            ]
+# S3 path format
+s3_path = 's3://{}/{}'
+
+def put_file_to_s3(filename, bucket, key, is_public=False):
+    with open(filename, "rb") as f:
+        if is_public:
+            response = client.upload_fileobj(f, bucket, key, ExtraArgs={'ACL': 'public-read'})
+        else:
+            response = client.upload_fileobj(f, bucket, key)
+    return response

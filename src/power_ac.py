@@ -1,6 +1,6 @@
 import pandas as pd
 
-from util import col_ac_w, col_ac_kw, col_ac_kw_invert_losses, col_dc_array
+from .util import col_ac_w, col_ac_kw, col_ac_kw_invert_losses, col_dc_array
 
 """
 Description:

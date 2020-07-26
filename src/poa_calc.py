@@ -2,7 +2,7 @@ import math
 import pandas as pd
 
 from typing import Tuple
-from util import col_ib, col_id, col_ir, col_dni, col_dhi, col_solar_zen_ang, \
+from .util import col_ib, col_id, col_ir, col_dni, col_dhi, col_solar_zen_ang, \
     col_aoi_deg, col_poa_wm2, col_poa_kwm2, col_di, col_dc, col_dh
 
 

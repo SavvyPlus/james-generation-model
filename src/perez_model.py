@@ -1,7 +1,7 @@
 import math
 import pandas as pd
 
-from util import col_perez_a, col_perez_b, col_aoi_deg, col_solar_zen_ang, \
+from .util import col_perez_a, col_perez_b, col_aoi_deg, col_solar_zen_ang, \
     col_perez_sky, col_dni, col_dhi, col_perez_air_mass_optical, col_perez_delta, \
     col_perez_f11, col_perez_f12, col_perez_f13, col_perez_f21, col_perez_f22, \
     col_perez_f23, col_perez_f1, col_perez_f2, col_model, col_di, col_dc, col_dh
