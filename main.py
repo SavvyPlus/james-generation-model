@@ -71,7 +71,7 @@ def lambda_handler(event, context):
 
     # output
     local_path = '{}_generation.csv'.format(name)
-    df.to_csv(f'/generation/{local_path}', index=False)
+    df.to_csv(f'generation/{local_path}', index=False)
     # print(put_file_to_s3(f'/tmp/{local_path}', bucket, local_path))
 
     return {

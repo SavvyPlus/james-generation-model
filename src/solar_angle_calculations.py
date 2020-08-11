@@ -12,12 +12,12 @@ def calculate_angle(df: pd.DataFrame, latitude: float, longitude: float, GMT: in
         """
 
     def get_date(stamp):
-        delta = stamp - pd.to_datetime('1899-12-30 00:00:00', utc='utc')
+        delta = stamp - pd.to_datetime('1899-12-30 00:00:00')
         timed = delta.total_seconds() / 86400
         return int(timed)
 
     def get_hour(stamp):
-        delta = stamp - pd.to_datetime('1899-12-30 00:00:00', utc='utc')
+        delta = stamp - pd.to_datetime('1899-12-30 00:00:00')
         timed = delta.total_seconds() / 86400
         date = int(timed)
         return timed - date

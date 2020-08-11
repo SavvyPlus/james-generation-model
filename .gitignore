@@ -2,3 +2,4 @@ venv
 sites
 .idea
 __pycache__
+generation
